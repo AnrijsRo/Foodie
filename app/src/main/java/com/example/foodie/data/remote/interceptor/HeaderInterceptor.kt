@@ -9,9 +9,10 @@ class HeaderInterceptor(
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val builder = request.newBuilder()
-        builder.addHeader("Authorization Bearer", tokenRepository.getAuthToken())
+        val builder = chain.request().newBuilder()
+
+        builder.addHeader("X-RapidAPI-Host", "tasty.p.rapidapi.com")
+        builder.addHeader("X-RapidAPI-Key", tokenRepository.getAuthToken())
 
         return chain.proceed(builder.build())
     }

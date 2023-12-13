@@ -2,7 +2,11 @@ package com.example.foodie.di
 
 
 import com.example.foodie.BuildConfig
+import com.example.foodie.data.domain.repository.recipe.RecipeRepository
+import com.example.foodie.data.domain.repository.recipe.RecipeRepositoryImpl
 import com.example.foodie.data.domain.repository.token.TokenRepository
+import com.example.foodie.data.domain.repository.token.TokenRepositoryImpl
+import com.example.foodie.data.remote.api.RecipeApi
 import com.example.foodie.data.remote.interceptor.HeaderInterceptor
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -35,6 +39,18 @@ object AppModule {
             buildClient(tokenRepository)
         ).build()
 
+    @Singleton
+    @Provides
+    fun provideRecipeApi(retrofit: Retrofit): RecipeApi = retrofit.create(RecipeApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideTokenRepository(): TokenRepository = TokenRepositoryImpl()
+
+    @Singleton
+    @Provides
+    fun provideRecipeRepository(recipeApi: RecipeApi): RecipeRepository = RecipeRepositoryImpl(recipeApi)
+
     private fun buildClient(
         tokenRepository: TokenRepository
     ): OkHttpClient {
@@ -48,5 +64,4 @@ object AppModule {
             .addInterceptor(loggingInterceptor)
             .build()
     }
-
 }

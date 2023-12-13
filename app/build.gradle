@@ -10,13 +10,17 @@ android {
     namespace 'com.example.foodie'
     compileSdk 34
 
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
     defaultConfig {
         applicationId "com.example.foodie"
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "SERVER_URL", "\"" + "server.com" + "\""
+        buildConfigField "String", "SERVER_URL", "\"" + "https://tasty.p.rapidapi.com" + "\""
+        buildConfigField "String", "API_TOKEN", "\"" + localProperties['API_TOKEN'] + "\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -74,10 +78,11 @@ dependencies {
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.1.0'
 
     // Navigation
-    implementation 'io.github.raamcosta.compose-destinations:core:1.8.42-beta'
-    ksp 'io.github.raamcosta.compose-destinations:ksp:1.8.42-beta'
+    implementation 'io.github.raamcosta.compose-destinations:animations-core:1.9.53'
+    ksp 'io.github.raamcosta.compose-destinations:ksp:1.9.53'
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"

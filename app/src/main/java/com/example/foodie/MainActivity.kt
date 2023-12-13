@@ -1,24 +1,40 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package com.example.foodie
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.ui.Alignment
+import androidx.navigation.NavHostController
+import com.example.foodie.ui.presentation.NavGraphs
 import com.example.foodie.ui.theme.FoodieTheme
+import com.example.foodie.ui.transitions.DefaultTransitionSet
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
+import dagger.hilt.android.AndroidEntryPoint
 
+@OptIn(ExperimentalMaterialNavigationApi::class)
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             FoodieTheme {
-                // A surface container using the 'background' color from the theme
+                val engine = rememberAnimatedNavHostEngine(
+                    navHostContentAlignment = Alignment.TopCenter,
+                    rootDefaultAnimations = DefaultTransitionSet.DEFAULT_SCREEN_TRANSITIONS
+                )
+                val navController: NavHostController = engine.rememberNavController()
 
+                DestinationsNavHost(
+                    navController = navController,
+                    navGraph = NavGraphs.root,
+                    engine = engine
+                )
             }
         }
     }
