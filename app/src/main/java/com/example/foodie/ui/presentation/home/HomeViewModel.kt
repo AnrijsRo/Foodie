@@ -21,9 +21,12 @@ class HomeViewModel @Inject constructor(private val recipeRepository: RecipeRepo
 
     private fun getRandomRecipes() {
         viewModelScope.launch {
-            recipeRepository.getRecipeList(offset = 0, numberOfItems = 5)
+            recipeRepository.getRecipeList(offset = 0, numberOfItems = 20)
                 .onSuccess { recipeList.addAll(it) }
                 .onError { }
         }
+    }
+
+    fun onRecipeClicked(recipe: RecipeListing) {
     }
 }

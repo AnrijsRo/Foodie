@@ -84,6 +84,14 @@ dependencies {
     implementation 'io.github.raamcosta.compose-destinations:animations-core:1.9.53'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.9.53'
 
+    // Shimemr
+    "com.valentinilk.shimmer:compose-shimmer:1.0.3"
+
+    // Async images
+    implementation "com.github.skydoves:landscapist-glide:1.5.3"
+    // Accompanist
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.1"
+
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"

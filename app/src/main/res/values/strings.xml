@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Foodie</string>
+    <string name="home_page_title">Foodie!</string>
 </resources>
