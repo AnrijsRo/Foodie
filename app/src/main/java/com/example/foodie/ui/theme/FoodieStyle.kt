@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.example.foodie.R
 
-object Style {
+object FoodieStyle {
     private val Bull = FontFamily(
         Font(R.font.bull_thin1, weight = FontWeight.Thin),
         Font(R.font.bull_regular, weight = FontWeight.Normal),
@@ -19,7 +19,7 @@ object Style {
         Font(R.font.bull_heavy1, weight = FontWeight.ExtraBold),
     )
 
-    val regularText = TextStyle(
+    val regular14White = TextStyle(
         color = Color.White,
         fontFamily = Bull,
         fontWeight = FontWeight.Normal,
@@ -27,13 +27,13 @@ object Style {
         lineHeight = 24.sp,
     )
 
-    val boldText = TextStyle(
+    val bold19White = TextStyle(
         color = Color.White,
         fontFamily = Bull,
         fontWeight = FontWeight.Bold,
         fontSize = 19.sp
     )
-    val boldTextBlack = TextStyle(
+    val bold19Black = TextStyle(
         color = Color.Black,
         fontFamily = Bull,
         platformStyle = PlatformTextStyle(
@@ -47,11 +47,11 @@ object Style {
         ),
     )
 
-    val mediumText = TextStyle(
-        color = Color.White,
+    val medium16Black = TextStyle(
+        color = Color.Black,
         fontFamily = Bull,
         fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         lineHeight = 20.sp
     )
     val medium16White = TextStyle(
@@ -62,7 +62,7 @@ object Style {
         lineHeight = 20.sp
     )
 
-    val thinText = TextStyle(
+    val thin48White = TextStyle(
         color = Color.White,
         fontFamily = Bull,
         fontWeight = FontWeight.Thin,

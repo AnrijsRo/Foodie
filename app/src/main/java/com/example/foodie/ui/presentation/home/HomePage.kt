@@ -28,14 +28,18 @@ import com.example.foodie.R
 import com.example.foodie.data.domain.repository.recipe.data.RecipeListing
 import com.example.foodie.ui.composable.PageContentColumn
 import com.example.foodie.ui.composable.VerticalSpacer
+import com.example.foodie.ui.composable.collectAsEffect
+import com.example.foodie.ui.presentation.destinations.RecipeDetailsPageDestination
+import com.example.foodie.ui.presentation.home.HomePageNavigationEvent.NavigateToRecipeDetailsPage
 import com.example.foodie.ui.theme.Padding
-import com.example.foodie.ui.theme.Style
+import com.example.foodie.ui.theme.FoodieStyle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.flow.SharedFlow
 
 @RootNavGraph(start = true)
 @Destination
@@ -44,6 +48,7 @@ fun HomePage(
     viewModel: HomeViewModel = hiltViewModel(),
     navigator: DestinationsNavigator = EmptyDestinationsNavigator
 ) {
+    HandleNavigationEvent(navigationEvent = viewModel.navigationEventFlow, navigator = navigator)
     PageContentColumn(
         navigator = navigator,
         hasBackButton = false,
@@ -92,9 +97,9 @@ fun RecipeListItem(
                 .padding(horizontal = Padding.padding3, vertical = Padding.padding4),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = recipeListing.name, style = Style.boldText)
+            Text(text = recipeListing.name, style = FoodieStyle.bold19White)
             VerticalSpacer(height = Padding.padding3)
-            Text(text = recipeListing.description, style = Style.medium16White)
+            Text(text = recipeListing.description, style = FoodieStyle.medium16White)
         }
     }
 
@@ -113,4 +118,15 @@ private fun RecipeListingGradient() {
                 )
             )
     )
+}
+
+@Composable
+private fun HandleNavigationEvent(
+    navigationEvent: SharedFlow<HomePageNavigationEvent>, navigator: DestinationsNavigator
+) {
+    navigationEvent.collectAsEffect {
+        when (it) {
+            is NavigateToRecipeDetailsPage -> navigator.navigate(RecipeDetailsPageDestination(it.navArgs))
+        }
+    }
 }

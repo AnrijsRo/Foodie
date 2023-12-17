@@ -2,7 +2,8 @@ package com.example.foodie.data.remote.api
 
 import com.example.foodie.data.remote.api.RecipeApi.Routes.RECIPES_DETAILS
 import com.example.foodie.data.remote.api.RecipeApi.Routes.RECIPES_LIST
-import com.example.foodie.data.remote.response.RecipeListDTO
+import com.example.foodie.data.remote.response.recipe.RecipeDetailsDTO
+import com.example.foodie.data.remote.response.recipe.RecipeListDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,7 +13,7 @@ interface RecipeApi {
     @GET(RECIPES_DETAILS)
     suspend fun getRecipeDetails(
         @Query("id") recipeId: Int,
-    ): Response<String>
+    ): Response<RecipeDetailsDTO>
 
     @GET(RECIPES_LIST)
     suspend fun getRecipeList(

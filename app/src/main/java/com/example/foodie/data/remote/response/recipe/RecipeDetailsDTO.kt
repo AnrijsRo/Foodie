@@ -1,6 +1,6 @@
-package com.example.foodie.data.remote.response
+package com.example.foodie.data.remote.response.recipe
 
-data class RecipeListingDTO(
+data class RecipeDetailsDTO(
     val id :Int,
     val name: String,
     val description: String,

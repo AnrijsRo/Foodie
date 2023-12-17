@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.example.foodie.R
 import com.example.foodie.ui.theme.Padding
-import com.example.foodie.ui.theme.Style
+import com.example.foodie.ui.theme.FoodieStyle
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
@@ -72,7 +72,7 @@ private fun TopBar(
             .statusBarsPadding()
             .padding(
                 top = Padding.padding7,
-                bottom = Padding.padding7,
+                bottom = Padding.padding5,
                 start = horizontalPadding,
                 end = horizontalPadding
             ),
@@ -99,7 +99,7 @@ private fun TopBar(
             Text(
                 text = title,
                 textAlign = TextAlign.Center,
-                style = Style.boldTextBlack,
+                style = FoodieStyle.bold19Black,
             )
         }
     }
