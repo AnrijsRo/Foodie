@@ -1,7 +1,11 @@
 package com.example.foodie.di
 
 
+import android.content.Context
+import androidx.room.Room
 import com.example.foodie.BuildConfig
+import com.example.foodie.data.domain.persistent.FOODIE_DATABASE
+import com.example.foodie.data.domain.persistent.FoodieDatabase
 import com.example.foodie.data.domain.repository.recipe.RecipeRepository
 import com.example.foodie.data.domain.repository.recipe.RecipeRepositoryImpl
 import com.example.foodie.data.domain.repository.token.TokenRepository
@@ -12,6 +16,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,6 +44,14 @@ object AppModule {
             buildClient(tokenRepository)
         ).build()
 
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): FoodieDatabase {
+        return Room.databaseBuilder(context, FoodieDatabase::class.java, FOODIE_DATABASE)
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
     @Singleton
     @Provides
     fun provideRecipeApi(retrofit: Retrofit): RecipeApi = retrofit.create(RecipeApi::class.java)
@@ -49,7 +62,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRecipeRepository(recipeApi: RecipeApi): RecipeRepository = RecipeRepositoryImpl(recipeApi)
+    fun provideRecipeRepository(recipeApi: RecipeApi, database: FoodieDatabase): RecipeRepository =
+        RecipeRepositoryImpl(recipeApi = recipeApi, foodieDatabase = database)
 
     private fun buildClient(
         tokenRepository: TokenRepository
