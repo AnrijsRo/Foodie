@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.example.foodie.BuildConfig
 import com.example.foodie.data.domain.persistent.FOODIE_DATABASE
 import com.example.foodie.data.domain.persistent.FoodieDatabase
+import com.example.foodie.data.domain.persistent.RecipeDao
 import com.example.foodie.data.domain.repository.recipe.RecipeRepository
 import com.example.foodie.data.domain.repository.recipe.RecipeRepositoryImpl
 import com.example.foodie.data.domain.repository.token.TokenRepository
@@ -52,6 +53,12 @@ object AppModule {
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun provideDao(db: FoodieDatabase): RecipeDao {
+        return db.recipeDao()
+    }
+
     @Singleton
     @Provides
     fun provideRecipeApi(retrofit: Retrofit): RecipeApi = retrofit.create(RecipeApi::class.java)
@@ -62,8 +69,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRecipeRepository(recipeApi: RecipeApi, database: FoodieDatabase): RecipeRepository =
-        RecipeRepositoryImpl(recipeApi = recipeApi, foodieDatabase = database)
+    fun provideRecipeRepository(recipeApi: RecipeApi, recipeDAO: RecipeDao): RecipeRepository =
+        RecipeRepositoryImpl(recipeApi = recipeApi, recipeDao = recipeDAO)
 
     private fun buildClient(
         tokenRepository: TokenRepository

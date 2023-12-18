@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.Glide
 import com.example.foodie.R
@@ -31,8 +32,8 @@ import com.example.foodie.ui.composable.VerticalSpacer
 import com.example.foodie.ui.composable.collectAsEffect
 import com.example.foodie.ui.presentation.destinations.RecipeDetailsPageDestination
 import com.example.foodie.ui.presentation.home.HomePageNavigationEvent.NavigateToRecipeDetailsPage
-import com.example.foodie.ui.theme.Padding
 import com.example.foodie.ui.theme.FoodieStyle
+import com.example.foodie.ui.theme.Padding
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -128,5 +129,19 @@ private fun HandleNavigationEvent(
         when (it) {
             is NavigateToRecipeDetailsPage -> navigator.navigate(RecipeDetailsPageDestination(it.navArgs))
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewRecipeListItem() {
+    RecipeListItem(
+        recipeListing = RecipeListing(
+            id = 2498,
+            name = "Dominic Kelly",
+            description = "prodesset",
+            imageUrl = "https://search.yahoo.com/search?p=dictas"
+        )
+    ) {
     }
 }
