@@ -1,6 +1,10 @@
 package com.example.foodie.data.domain.repository.recipe
 
 import com.example.foodie.data.domain.persistent.RecipeDao
+import com.example.foodie.data.domain.persistent.toRecipeDetails
+import com.example.foodie.data.domain.persistent.toRecipeDetailsEntity
+import com.example.foodie.data.domain.persistent.toRecipeListing
+import com.example.foodie.data.domain.persistent.toRecipeListingEntity
 import com.example.foodie.data.domain.repository.recipe.data.RecipeDetails
 import com.example.foodie.data.domain.repository.recipe.data.RecipeListing
 import com.example.foodie.data.remote.api.RecipeApi
@@ -13,6 +17,10 @@ class RecipeRepositoryImpl(
 ) : RecipeRepository {
 
     override suspend fun getRecipeDetails(recipeId: Int): OperationResult<RecipeDetails> {
+        val recipeCached = recipeDao.getSavedRecipeDetails(recipeId)?.toRecipeDetails()
+        recipeCached?.let {
+            return OperationResult.Success(it)
+        }
         return recipeApi.getRecipeDetails(recipeId = recipeId)
             .toOperationResult { it.toRecipeDetails() }
     }
@@ -37,6 +45,10 @@ class RecipeRepositoryImpl(
     }
 
     override suspend fun saveRecipeListing(recipes: List<RecipeListing>) {
-        recipeDao.upsertRecipeListing(recipes.map { it.toRecipeListingEntity() })
+        recipeDao.saveRecipeListing(recipes.map { it.toRecipeListingEntity() })
+    }
+
+    override suspend fun saveRecipeDetails(recipeDetails: RecipeDetails) {
+        recipeDao.saveRecipeDetails(recipeDetails.toRecipeDetailsEntity())
     }
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.foodie.data.domain.repository.recipe.RecipeRepository
 import com.example.foodie.data.domain.repository.recipe.data.RecipeDetails
 import com.example.foodie.ui.presentation.navArgs
+import com.example.foodie.util.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,8 +32,14 @@ class RecipeDetailsViewModel @Inject constructor(
     private fun getRecipeDetails(recipeId: Int) = viewModelScope.launch {
         isLoading = true
         recipeRepository.getRecipeDetails(recipeId)
-            .onSuccess { recipeDetails = it }
+            .onSuccess { handleReceivedRecipeDetails(it) }
         isLoading = false
     }
 
+    private fun handleReceivedRecipeDetails(details: RecipeDetails) {
+        recipeDetails = details
+        launch {
+            recipeRepository.saveRecipeDetails(details)
+        }
+    }
 }
