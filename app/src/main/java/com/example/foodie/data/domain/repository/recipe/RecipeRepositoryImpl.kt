@@ -29,7 +29,6 @@ class RecipeRepositoryImpl(
     override suspend fun getRecipeList(
         offset: Int, numberOfItems: Int, fromCache: Boolean
     ): OperationResult<List<RecipeListing>> {
-        delay(5000)
         val listings =
             if (fromCache) recipeDao.getSavedRecipeListings()
                 .map { it.toRecipeListing() } else emptyList()

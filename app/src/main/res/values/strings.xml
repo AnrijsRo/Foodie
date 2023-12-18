@@ -2,4 +2,5 @@
     <string name="app_name">Foodie</string>
     <string name="home_page_title">Foodie!</string>
     <string name="failed_loading_icon">Couldn\'t load image</string>
+    <string name="pull_to_refresh_hint">Refresh to load fresh recipes!</string>
 </resources>

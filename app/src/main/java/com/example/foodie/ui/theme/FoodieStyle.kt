@@ -19,14 +19,6 @@ object FoodieStyle {
         Font(R.font.bull_heavy1, weight = FontWeight.ExtraBold),
     )
 
-    val regular14White = TextStyle(
-        color = Color.White,
-        fontFamily = Bull,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 24.sp,
-    )
-
     val bold19White = TextStyle(
         color = Color.White,
         fontFamily = Bull,
@@ -54,6 +46,13 @@ object FoodieStyle {
         fontSize = 16.sp,
         lineHeight = 20.sp
     )
+    val medium16Gray= TextStyle(
+        color = Color.Gray,
+        fontFamily = Bull,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 20.sp
+    )
     val medium16White = TextStyle(
         color = Color.White,
         fontFamily = Bull,
@@ -62,10 +61,4 @@ object FoodieStyle {
         lineHeight = 20.sp
     )
 
-    val thin48White = TextStyle(
-        color = Color.White,
-        fontFamily = Bull,
-        fontWeight = FontWeight.Thin,
-        fontSize = 48.sp
-    )
 }

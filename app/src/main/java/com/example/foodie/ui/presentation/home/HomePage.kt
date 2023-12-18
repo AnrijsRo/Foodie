@@ -1,6 +1,9 @@
 package com.example.foodie.ui.presentation.home
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,6 +32,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -102,6 +105,8 @@ private fun RecipeListingLazyColumn(
     onRecipeClicked: (RecipeListing) -> Unit,
 ) {
     LazyColumn(state = rememberLazyListState()) {
+        item { VerticalSpacer(height = Padding.padding3) }
+        item { PullRefreshHint(isRefreshing) }
         item { VerticalSpacer(height = Padding.padding8) }
         items(items = recipeList, key = { it.id }) { recipe ->
             RecipeListItem(
@@ -111,7 +116,20 @@ private fun RecipeListingLazyColumn(
             VerticalSpacer(height = Padding.padding3)
         }
     }
+}
 
+@Composable
+private fun PullRefreshHint(isRefreshing: Boolean) {
+    AnimatedVisibility(visible = !isRefreshing,
+        enter = fadeIn(),
+        exit = fadeOut()) {
+        Text(
+            text = stringResource(id = R.string.pull_to_refresh_hint),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = FoodieStyle.medium16Gray
+        )
+    }
 }
 
 @Composable
@@ -194,9 +212,7 @@ private fun RecipeListingShimmer() {
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(Padding.padding4))
                     .shimmerOver()
-
                     .background(Color(0xFFC7C7CC))
-
             )
             VerticalSpacer(height = Padding.padding3)
         }

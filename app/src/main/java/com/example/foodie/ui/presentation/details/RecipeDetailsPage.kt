@@ -83,10 +83,13 @@ private fun RecipeDetailsShimmer() {
                 .shimmerOver()
                 .background(Color(0xFFC7C7CC))
         )
-        VerticalSpacer(height = Padding.padding3)
-        ShimmerBox()
-        VerticalSpacer(height = Padding.padding5)
-        ShimmerBox(widthFraction = 0.7f, height = Padding.padding12)
+        Column(Modifier.padding(horizontal = Padding.padding4)) {
+            VerticalSpacer(height = Padding.padding3)
+            ShimmerBox()
+            VerticalSpacer(height = Padding.padding5)
+            ShimmerBox(widthFraction = 0.7f, height = Padding.padding12)
+        }
+
     }
 
 
