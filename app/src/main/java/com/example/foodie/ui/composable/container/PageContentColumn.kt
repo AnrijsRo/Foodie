@@ -1,4 +1,4 @@
-package com.example.foodie.ui.composable
+package com.example.foodie.ui.composable.container
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

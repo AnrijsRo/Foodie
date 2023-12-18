@@ -2,6 +2,7 @@ package com.example.foodie.ui.composable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -16,5 +17,12 @@ fun <T> Flow<T>.collectAsEffect(
 ) {
     LaunchedEffect(key1 = Unit) {
         onEach(block).flowOn(context).launchIn(this)
+    }
+}
+fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier): Modifier {
+    return if (condition) {
+        then(modifier(this))
+    } else {
+        this
     }
 }

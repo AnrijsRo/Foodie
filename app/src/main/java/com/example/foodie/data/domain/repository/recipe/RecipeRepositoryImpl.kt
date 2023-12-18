@@ -10,6 +10,7 @@ import com.example.foodie.data.domain.repository.recipe.data.RecipeListing
 import com.example.foodie.data.remote.api.RecipeApi
 import com.example.foodie.util.OperationResult
 import com.example.foodie.util.toOperationResult
+import kotlinx.coroutines.delay
 
 class RecipeRepositoryImpl(
     private val recipeApi: RecipeApi,
@@ -28,6 +29,7 @@ class RecipeRepositoryImpl(
     override suspend fun getRecipeList(
         offset: Int, numberOfItems: Int, fromCache: Boolean
     ): OperationResult<List<RecipeListing>> {
+        delay(5000)
         val listings =
             if (fromCache) recipeDao.getSavedRecipeListings()
                 .map { it.toRecipeListing() } else emptyList()

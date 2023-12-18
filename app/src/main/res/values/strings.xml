@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Foodie</string>
     <string name="home_page_title">Foodie!</string>
+    <string name="failed_loading_icon">Couldn\'t load image</string>
 </resources>

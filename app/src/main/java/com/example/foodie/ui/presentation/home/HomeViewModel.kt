@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.foodie.data.domain.repository.recipe.RecipeRepository
 import com.example.foodie.data.domain.repository.recipe.data.RecipeListing
 import com.example.foodie.ui.presentation.details.RecipeDetailsNavArgs
-import com.example.foodie.ui.presentation.home.HomePageNavigationEvent.NavigateToRecipeDetailsPage
+import com.example.foodie.ui.presentation.home.HomeViewModel.HomePageNavigationEvent.NavigateToRecipeDetailsPage
 import com.example.foodie.util.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,45 +25,65 @@ class HomeViewModel @Inject constructor(private val recipeRepository: RecipeRepo
     val navigationEventFlow = _navigatorFlow.asSharedFlow()
     var recipeList by mutableStateOf<List<RecipeListing>>(emptyList())
         private set
+    var refreshState by mutableStateOf<RefreshState>(RefreshState.Idle)
+        private set
+    var isLoading by mutableStateOf(false)
+        private set
+    var failedLoad by mutableStateOf(false)
+        private set
 
     init {
-        getRandomRecipes(true)
+        getRandomRecipes(fromCache = true, isRefresh = false)
     }
 
     fun onRecipeClicked(recipe: RecipeListing) {
         viewModelScope.launch {
-            _navigatorFlow.emit(NavigateToRecipeDetailsPage(RecipeDetailsNavArgs(recipe.id)))
+            _navigatorFlow.emit(
+                NavigateToRecipeDetailsPage(
+                    RecipeDetailsNavArgs(recipe.id)
+                )
+            )
         }
     }
 
     fun onRefresh() {
-        getRandomRecipes(false)
+        getRandomRecipes(fromCache = false, isRefresh = true)
     }
 
-    private fun getRandomRecipes(fromCache: Boolean) {
+    private fun getRandomRecipes(fromCache: Boolean, isRefresh: Boolean) = launch {
         val offset = Random.nextInt(0, 100)
-
-        launch {
-            recipeRepository.getRecipeList(
-                offset = offset,
-                numberOfItems = 20,
-                fromCache = fromCache
-            )
-                .onSuccess { handleReceivedRecipes(it) }
-                .onError { }
+        isLoading = true
+        if (isRefresh) {
+            refreshState = RefreshState.Refreshing
+            isLoading = false
         }
+        recipeRepository.getRecipeList(
+            offset = offset,
+            numberOfItems = 20,
+            fromCache = fromCache
+        )
+            .onSuccess { handleReceivedRecipes(it) }
+            .onError { failedLoad = true }
+        isLoading = false
+        refreshState = RefreshState.Idle
     }
+
 
     private fun handleReceivedRecipes(recipes: List<RecipeListing>) {
         recipeList = recipes
-        launch {
-            recipeRepository.saveRecipeListing(recipes)
-        }
+        launch { recipeRepository.saveRecipeListing(recipes) }
+    }
+
+    sealed class HomePageNavigationEvent {
+        data class NavigateToRecipeDetailsPage(
+            val navArgs: RecipeDetailsNavArgs
+        ) : HomePageNavigationEvent()
     }
 }
 
-sealed class HomePageNavigationEvent {
-    data class NavigateToRecipeDetailsPage(
-        val navArgs: RecipeDetailsNavArgs
-    ) : HomePageNavigationEvent()
+sealed class RefreshState {
+    data object Idle : RefreshState()
+    data object Refreshing : RefreshState()
 }
+
+fun RefreshState.isRefreshing() = this is RefreshState.Refreshing

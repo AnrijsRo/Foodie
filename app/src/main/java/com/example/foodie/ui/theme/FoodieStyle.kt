@@ -31,7 +31,7 @@ object FoodieStyle {
         color = Color.White,
         fontFamily = Bull,
         fontWeight = FontWeight.Bold,
-        fontSize = 19.sp
+        fontSize = 36.sp
     )
     val bold19Black = TextStyle(
         color = Color.Black,
