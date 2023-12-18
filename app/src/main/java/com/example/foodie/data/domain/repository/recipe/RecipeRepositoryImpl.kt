@@ -8,9 +8,11 @@ import com.example.foodie.data.domain.persistent.toRecipeListingEntity
 import com.example.foodie.data.domain.repository.recipe.data.RecipeDetails
 import com.example.foodie.data.domain.repository.recipe.data.RecipeListing
 import com.example.foodie.data.remote.api.RecipeApi
+import com.example.foodie.util.ErrorResponse
 import com.example.foodie.util.OperationResult
 import com.example.foodie.util.toOperationResult
 import kotlinx.coroutines.delay
+import kotlin.random.Random
 
 class RecipeRepositoryImpl(
     private val recipeApi: RecipeApi,
@@ -36,6 +38,11 @@ class RecipeRepositoryImpl(
         return if (listings.isNotEmpty()) {
             OperationResult.Success(listings)
         } else {
+            val throwFailure = Random.nextBoolean()
+            if (throwFailure) {
+                delay(500)
+                return OperationResult.Error(ErrorResponse(4, "Fake error"))
+            }
             recipeApi.getRecipeList(itemOffset = offset, numberOfItems = numberOfItems)
                 .toOperationResult { recipeListDTO ->
                     recipeListDTO.results.map {

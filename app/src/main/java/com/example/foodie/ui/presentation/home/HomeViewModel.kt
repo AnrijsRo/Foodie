@@ -53,6 +53,7 @@ class HomeViewModel @Inject constructor(private val recipeRepository: RecipeRepo
     private fun getRandomRecipes(fromCache: Boolean, isRefresh: Boolean) = launch {
         val offset = Random.nextInt(0, 100)
         isLoading = true
+        failedLoad = false
         if (isRefresh) {
             refreshState = RefreshState.Refreshing
             isLoading = false
@@ -67,7 +68,6 @@ class HomeViewModel @Inject constructor(private val recipeRepository: RecipeRepo
         isLoading = false
         refreshState = RefreshState.Idle
     }
-
 
     private fun handleReceivedRecipes(recipes: List<RecipeListing>) {
         recipeList = recipes

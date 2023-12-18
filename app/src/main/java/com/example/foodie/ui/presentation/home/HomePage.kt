@@ -25,6 +25,7 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,12 +79,14 @@ fun HomePage(
             hasBackButton = false,
             pageTitle = stringResource(id = R.string.home_page_title)
         ) {
+            //isLoading,failedLoad could also be wrapped in a state, to better make use of the animated content
             AnimatedContent(targetState = viewModel.isLoading, label = "") { isLoading ->
                 if (isLoading) {
                     RecipeListingShimmer()
                 } else {
                     RecipeListingLazyColumn(
                         recipeList = viewModel.recipeList,
+                        failedLoad = viewModel.failedLoad,
                         isRefreshing = viewModel.refreshState.isRefreshing(),
                         onRecipeClicked = { viewModel.onRecipeClicked(it) }
                     )
@@ -98,16 +101,17 @@ fun HomePage(
     }
 }
 
+@Stable
 @Composable
 private fun RecipeListingLazyColumn(
     recipeList: List<RecipeListing>,
+    failedLoad: Boolean,
     isRefreshing: Boolean,
     onRecipeClicked: (RecipeListing) -> Unit,
 ) {
     LazyColumn(state = rememberLazyListState()) {
-        item { VerticalSpacer(height = Padding.padding3) }
-        item { PullRefreshHint(isRefreshing) }
-        item { VerticalSpacer(height = Padding.padding8) }
+        item { RefreshStatus(isRefreshing = isRefreshing, failedLoad = failedLoad) }
+
         items(items = recipeList, key = { it.id }) { recipe ->
             RecipeListItem(
                 recipeListing = recipe,
@@ -115,17 +119,22 @@ private fun RecipeListingLazyColumn(
                 onRecipeClicked = { onRecipeClicked(recipe) })
             VerticalSpacer(height = Padding.padding3)
         }
+
     }
 }
 
 @Composable
-private fun PullRefreshHint(isRefreshing: Boolean) {
-    AnimatedVisibility(visible = !isRefreshing,
+private fun RefreshStatus(isRefreshing: Boolean, failedLoad: Boolean) {
+    AnimatedVisibility(
+        visible = !isRefreshing,
         enter = fadeIn(),
-        exit = fadeOut()) {
+        exit = fadeOut()
+    ) {
         Text(
-            text = stringResource(id = R.string.pull_to_refresh_hint),
-            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(if (failedLoad) R.string.failed_loading_recipes else R.string.pull_to_refresh_hint),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = Padding.padding4),
             textAlign = TextAlign.Center,
             style = FoodieStyle.medium16Gray
         )
